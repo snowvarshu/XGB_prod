@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import pandas as pd
 import joblib
 
-model_package = r"C:/Users/jenifer/Downloads/XGBoost_Model/crop_pattern_model_XGB.joblib"
+model_package = r"C:/Users/jenifer/Downloads/XGB/XGBoost_Model/crop_pattern_model_XGB.joblib"
 
 
 package = joblib.load(model_package)
@@ -113,6 +113,13 @@ try:
         )[0]
     )
 
+
+    print("INPUT:")
+    print(new_data)
+
+    print("PREDICTED SCORE:")
+    print(score)
+    
     score = max(
         0,
         min(score, 100)
@@ -138,6 +145,12 @@ try:
         f"Status: {status}"
     )
 
+    result = {
+        "raw_score": score,
+        "cropping_pattern_score": round(score, 2),
+        "status": status
+    }
+    print(result)
 except Exception as e:
 
     print(

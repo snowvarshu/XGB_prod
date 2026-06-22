@@ -4,12 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import joblib
 
-model_package = r"C:/Users/jenifer/Downloads/XGBoost_Model/crop_pattern_model_XGB.joblib"
-
-package = joblib.load(
-    "crop_pattern_model_XGB.joblib"
-)
-
+model_package = r"C:/Users/jenifer/Downloads/XGB/XGBoost_Model/crop_pattern_model_XGB.joblib"
 
 package = joblib.load(model_package)
 mean_model = package["mean_model"]
@@ -19,6 +14,25 @@ valid_values = package["valid_values"]
 
 app = FastAPI(title="Crop Pattern API")
 
+
+test = pd.DataFrame([{
+    "crop":"maize",
+    "crop_year":2020,
+    "season":"whole year",
+    "state":"gujarat",
+    "area":944,
+    "yield":15
+}])
+
+print(
+    "Mean:",
+    mean_model.predict(test)[0]
+)
+
+print(
+    "Median:",
+    median_model.predict(test)[0]
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
