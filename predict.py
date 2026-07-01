@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import pandas as pd
 import joblib
 
-model_package = r"C:/Users/jenifer/Downloads/XGB/XGBoost_Model/crop_pattern_model_XGB.joblib"
+model_package = "crop_pattern_model_XGB.joblib"
 
 
 package = joblib.load(model_package)
@@ -11,7 +11,6 @@ mean_model = package["mean_model"]
 median_model = package["median_model"]
 
 valid_values = package["valid_values"]
-
 app = FastAPI(title="Crop Pattern API")
 
 method = input(
@@ -85,9 +84,9 @@ try:
         )
     )
 
-    yield_val = float(
+    production_val = float(
         input(
-            "Enter Yield: "
+            "Enter Production: "
         )
     )
 
@@ -104,7 +103,7 @@ try:
         "season": [season],
         "state": [state],
         "area": [area],
-        "yield": [yield_val]
+        "production": [production_val]
     })
    
     score = float(
@@ -112,10 +111,6 @@ try:
             new_data
         )[0]
     )
-
-
-    print("INPUT:")
-    print(new_data)
 
     print("PREDICTED SCORE:")
     print(score)
@@ -145,12 +140,6 @@ try:
         f"Status: {status}"
     )
 
-    result = {
-        "raw_score": score,
-        "cropping_pattern_score": round(score, 2),
-        "status": status
-    }
-    print(result)
 except Exception as e:
 
     print(

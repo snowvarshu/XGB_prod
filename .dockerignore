@@ -1,0 +1,17 @@
+.venv
+__pycache__
+frontend/node_modules
+frontend/.angular
+frontend/.vscode
+frontend/dist
+frontend/build
+.git
+.vscode
+*.pyc
+venv
+*.csv
+
+.git
+.gitignore
+
+*.ipynb

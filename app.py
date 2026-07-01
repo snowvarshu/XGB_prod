@@ -4,35 +4,16 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import joblib
 
-model_package = r"C:/Users/jenifer/Downloads/XGB/XGBoost_Model/crop_pattern_model_XGB.joblib"
+model_package = "crop_pattern_model_XGB.joblib"
 
 package = joblib.load(model_package)
 mean_model = package["mean_model"]
 median_model = package["median_model"]
 
 valid_values = package["valid_values"]
-
+print(valid_values.keys())
 app = FastAPI(title="Crop Pattern API")
 
-
-test = pd.DataFrame([{
-    "crop":"maize",
-    "crop_year":2020,
-    "season":"whole year",
-    "state":"gujarat",
-    "area":944,
-    "yield":15
-}])
-
-print(
-    "Mean:",
-    mean_model.predict(test)[0]
-)
-
-print(
-    "Median:",
-    median_model.predict(test)[0]
-)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -67,7 +48,7 @@ class CropRequest(BaseModel):
     season: str
     state: str
     area: float
-    yield_val: float = Field(..., alias="yield")
+    production: float 
     method: str  
     
 @app.post("/predict")
@@ -96,7 +77,7 @@ def predict(data: CropRequest):
             "season": season,
             "state": state,
             "area": data.area,
-            "yield": data.yield_val
+            "production": data.production
         }])
 
         score = float(model.predict(new_data)[0])
@@ -117,7 +98,14 @@ def predict(data: CropRequest):
         }
     except Exception as e:
         return {"error": str(e)}
-
+@app.get("/dropdowns")
+def dropdowns():
+    return {
+        "crops": valid_values["crops"],
+        "states": valid_values["states"],
+        "seasons": valid_values["seasons"]
+    }
+    
 @app.get("/")
 def home():
     return {"message": "Crop Pattern Prediction API Running!"}
