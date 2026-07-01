@@ -11,7 +11,6 @@ mean_model = package["mean_model"]
 median_model = package["median_model"]
 
 valid_values = package["valid_values"]
-print(valid_values.keys())
 app = FastAPI(title="Crop Pattern API")
 
 app.add_middleware(
